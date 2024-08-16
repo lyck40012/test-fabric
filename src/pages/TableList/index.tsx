@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {fabric} from 'fabric'
 import "./index.less"
 import  Tools from "./Tools";
@@ -9,15 +9,16 @@ const MyComponent = () => {
   useEffect(() => {
     const canvas = new fabric.Canvas('canvas');
     setCanvas(canvas)
-    canvas.on('object:selected',(event)=>{
-      let activeObject = event.target()
-      console.log(activeObject)
-        setActiveObject(activeObject)
+    canvas.on('selection:updated',(event)=>{
+        setActiveObject(canvas.getActiveObject())
+    })
+    canvas.on('mouse:down',(event)=>{
+      let activeObject = canvas.getActiveObject()
+    if(!activeObject){
+      setActiveObject({})
+    }
     })
   }, []);
-  useEffect(() => {
-    console.log(123)
-  }, [activeObject]);
   return (
     <div>
       <CanvasContext.Provider value={{canvas,activeObject}}>

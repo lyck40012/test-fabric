@@ -6,6 +6,7 @@ import { downFile } from "@/utils/utils"
 const MyComponent = () => {
   const  { canvas,activeObject } = useContext(CanvasContext);
   const handlePosition = () => {
+    console.log(activeObject)
     if (activeObject) {
       activeObject.set('left', 300);
       activeObject.set('top', 500);
@@ -26,7 +27,6 @@ const MyComponent = () => {
     }
   }
   const handleDelete = () => {
-
     canvas.remove(activeObject);
   }
   const onChange = (val: any) => {
