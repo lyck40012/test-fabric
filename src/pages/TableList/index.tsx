@@ -5,18 +5,19 @@ import  Tools from "./Tools";
 export const CanvasContext = React.createContext({})
 const MyComponent = () => {
   const [canvas, setCanvas] = useState<any>(null)
-  const [activeObject,setActiveObject] = useState<any>({})
+  const [activeObject,setActiveObject] = useState<any>()
   useEffect(() => {
     const canvas = new fabric.Canvas('canvas');
     setCanvas(canvas)
-    canvas.on('selection:updated',(event)=>{
-        setActiveObject(canvas.getActiveObject())
-    })
+    // canvas.on('selection:updated',(event)=>{
+    //     setActiveObject(canvas.getActiveObject())
+    // })
     canvas.on('mouse:down',(event)=>{
       let activeObject = canvas.getActiveObject()
-    if(!activeObject){
-      setActiveObject({})
-    }
+      setActiveObject(activeObject)
+    // if(!activeObject){
+    //   setActiveObject(null)
+    // }
     })
   }, []);
   return (
