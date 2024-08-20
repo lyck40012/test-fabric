@@ -5,10 +5,10 @@ import { InputNumber} from "antd";
 import {CanvasContext} from "@/pages/TableList";
 type InputNumberProps = 1 | 1920 |1080| null | undefined |number
 const CenterRight = () => {
-  const  { canvas } = useContext(CanvasContext);
+  const  { canvas,canvasSizeObj } = useContext(CanvasContext);
   const [isShow, setIsShow] = useState(true);
-  const [width, setWidth] = useState<InputNumberProps>(500);
-  const [height, setHeight] = useState<InputNumberProps>(500);
+  const [width, setWidth] = useState<InputNumberProps>(canvasSizeObj.width);
+  const [height, setHeight] = useState<InputNumberProps>(canvasSizeObj.height);
   const handleInputNumberWidthChange = (val:1 | 1920 | null)=>{
     setWidth(val)
     canvas.setWidth(val);

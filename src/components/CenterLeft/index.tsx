@@ -1,15 +1,32 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import style from "./index.less"
 import AddIText from "@/image/addIText.png";
 import shelves1 from "@/image/shelves/shelves1.png"
 import {LeftOutlined, RightOutlined} from '@ant-design/icons';
+import {CanvasContext} from "@/pages/TableList";
+import {fabric} from 'fabric'
 const CenterLeft = () => {
+  const  { canvas } = useContext(CanvasContext);
   const [type, setType] = useState('props');
   const [isShow, setIsShow] = useState(true);
   const changeType = (type: string) => {
     setType(type);
   }
-  return (
+  const addRect = ()=>{
+    const rect = new fabric.Rect({
+      left: 100,
+      top: 100,
+      width: 400,
+      height: 200,
+      fill: '#FFFFCC',
+      stroke: 'black',
+      strokeWidth: 2,
+      customData: { id: 1, name: 'rectangle1' }
+    });
+    canvas.add(rect)
+    canvas.renderAll();
+  }
+    return (
     <div className={style.centerLeft} style={{width:!isShow&&3}}>
       <div className={style.sider} >
         <div className={style.top} style={{border:!isShow&&'none'}}>
@@ -23,7 +40,7 @@ const CenterLeft = () => {
         <div className={style.template}>
           <div className={style.template_name}>货架模板</div>
           <div className={style.template_box}>
-            <div className={style.template_box_item}>
+            <div className={style.template_box_item} onClick={addRect}>
               <img src={shelves1} alt=""/>
               <span>中央货架</span>
             </div>

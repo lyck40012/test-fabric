@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Divider, Tooltip} from "antd";
-import Revocation from  "@/image/revocation.png"
+import Revocation from  "@/image/Revocation.png"
 import Restore from  "@/image/restore.png"
 import ClearCanvas from "@/image/clearCanvas.png"
 const History = () => {

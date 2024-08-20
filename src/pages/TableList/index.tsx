@@ -1,4 +1,4 @@
-import React, {useEffect,useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {fabric} from 'fabric'
 import style from "./index.less"
 import  Tools from "./Tools";
@@ -10,12 +10,22 @@ import AddIText from "@/image/addIText.png";
 import SaveOptions from "@/components/SaveOptions";
 import CenterLeft from "@/components/CenterLeft";
 import CenterRight from "@/components/CenterRight";
+import RightMenu from "@/components/RightMenu";
 const { Header} = Layout;
 export const CanvasContext = React.createContext({})
 const MyComponent = () => {
   const [canvas, setCanvas] = useState<any>(null)
+  const [canvasSizeObj,setCanvasSizeObj] = useState<any>({
+    width: 600,
+    height: 600,
+  })
   useEffect(() => {
-    const canvas = new fabric.Canvas('canvas');
+    const canvas = new fabric.Canvas('canvas',{
+      backgroundColor: '#fff', // 背景色
+      fireRightClick: true,
+      stopContextMenu: true,
+      preserveObjectStacking: true
+    });
     setCanvas(canvas)
     // 重写 toObject 方法以包含自定义数据
     fabric.Rect.prototype.toObject = (function(toObject) {
@@ -25,12 +35,16 @@ const MyComponent = () => {
         });
       };
     })(fabric.Rect.prototype.toObject);
-    // canvasSize(canvas)
+    canvasSize(canvas)
+    var myDiv:any = document.getElementById('rightDev');
+    myDiv.addEventListener('contextmenu', function(event:any) {
+      event.preventDefault(); // 阻止默认的右键菜单
+    });
   }, []);
 
   return (
-    <CanvasContext.Provider value={{canvas}}>
-      <Tools />
+    <CanvasContext.Provider value={{canvas ,canvasSizeObj}}>
+      {/*<Tools />*/}
       <Layout className={style.content}>
         {/*头部*/}
         <Header className={style.top}>
@@ -59,10 +73,13 @@ const MyComponent = () => {
         </Header>
         <div className={style.canvasContent}>
           <CenterLeft />
-          <div className={style.workspace} id="workspace">
-            <canvas id='canvas' style={{backgroundColor:'#fff'}} width={500} height={500}></canvas>
+          <div className={style.workspace}  >
+            <div style={{position:'relative'}} id="rightDev">
+              <canvas id='canvas' width={canvasSizeObj.width} height={canvasSizeObj.height}></canvas>
+              <RightMenu/>
+            </div>
           </div>
-          <CenterRight />
+          <CenterRight/>
         </div>
       </Layout>
     </CanvasContext.Provider>
