@@ -1,0 +1,50 @@
+.centerRight{
+  display: flex;
+  align-items: center;
+  width: 30%;
+  height: 100%;
+  position: relative;
+  transition: width 0.3s ease;
+
+   .rightSider{
+     overflow: hidden;
+     height: 100%;
+     width: 100%;
+     background-color: #FFFFFF;
+      &_name{
+        font-size: 12px;
+        color: #3D3D3D;
+        padding: 15px 11px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+      }
+     &_sizeBox{
+       margin: 21px;
+       &_name{
+         font-size: 14px;
+         color: rgba(0, 0, 0, 0.85);
+       }
+       &_box{
+         display: flex;
+         justify-content: space-between;
+         margin-top: 21px;
+        :global{
+          .ant-input-number-handler-wrap{
+            display: none;
+          }
+        }
+       }
+     }
+   }
+  .options{
+    position: absolute;
+    left: -20px;
+    background-image: url('../../image/centerRight.png');
+    background-size: 100%;
+    width: 20px;
+    height: 64px;
+    text-align: center;
+    line-height: 64px;
+    cursor: pointer;
+    z-index: 5;
+  }
+}

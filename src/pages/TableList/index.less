@@ -1,3 +1,39 @@
-#canvas{
-  border:1px solid black
+.content {
+  box-sizing: border-box;
+
+  .top {
+    height: 46px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 12px;
+    background-color: #FFFFFF;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+
+    :global {
+      .ant-select:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+      .ant-select-selector {
+        border-color: transparent;
+        box-shadow: none;
+      }
+    }
+  }
+
+  .canvasContent {
+    display: flex;
+  }
+
+  .workspace {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    background-color: #f0f4f8;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
 }

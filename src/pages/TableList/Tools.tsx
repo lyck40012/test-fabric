@@ -4,9 +4,9 @@ import  {CanvasContext} from "./index"
 import {fabric} from 'fabric'
 import { downFile } from "@/utils/utils"
 const MyComponent = () => {
-  const  { canvas,activeObject } = useContext(CanvasContext);
+  const  { canvas } = useContext(CanvasContext);
   const handlePosition = () => {
-    console.log(activeObject)
+    let activeObject = canvas.getActiveObject()
     if (activeObject) {
       activeObject.set('left', 300);
       activeObject.set('top', 500);
@@ -14,6 +14,7 @@ const MyComponent = () => {
     }
   }
   const fuzhi = () => {
+    let activeObject = canvas.getActiveObject()
     if (activeObject) {
       activeObject.clone((cloned: any) => {
         cloned.set({
@@ -27,10 +28,11 @@ const MyComponent = () => {
     }
   }
   const handleDelete = () => {
+    let activeObject = canvas.getActiveObject()
     canvas.remove(activeObject);
   }
   const onChange = (val: any) => {
-
+    let activeObject = canvas.getActiveObject()
     let color = val.toHexString()
     if (activeObject) {
       activeObject.set('fill', color); // 修改对象的填充颜色
@@ -41,13 +43,15 @@ const MyComponent = () => {
     const rect = new fabric.Rect({
       left: 100,
       top: 100,
-      width: 200,
+      width: 400,
       height: 200,
       fill: '#FFFFCC',
       stroke: 'black',
       strokeWidth: 2,
+      customData: { id: 1, name: 'rectangle1' }
     });
     canvas.add(rect)
+    canvas.renderAll();
   }
   const addCircle =()=>{
     const circle = new fabric.Circle({

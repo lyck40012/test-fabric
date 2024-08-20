@@ -1,0 +1,121 @@
+.centerLeft {
+  display: flex;
+  align-items: center;
+  width: 25%;
+  height: 100%;
+  position: relative;
+  transition: width 0.3s ease;
+  .sider {
+    background-color: #FFFFFF;
+    padding-right: 10px;
+    width: 100%;
+    height: 100%;
+     overflow: hidden;
+    .top {
+      display: flex;
+      white-space: nowrap;
+      height: 42px;
+      padding: 15px 11px;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+
+      span {
+        cursor: pointer;
+      }
+
+      .one {
+        margin-right: 24px;
+      }
+
+      .selectItem {
+        color: #3D3D3D;
+      }
+    }
+
+    .template {
+      margin-top: 21px;
+
+      &_name {
+        color: rgba(0, 0, 0, 0.6);
+        margin: 21px;
+        white-space: nowrap;
+      }
+
+      &_box {
+        display: flex;
+        justify-content: space-between;
+        margin-left: 10px;
+        margin-top: 21px;
+        &_item {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          box-sizing: border-box;
+          width: 96px;
+          height: 92px;
+          border-radius: 8px;
+          background-color: rgba(0, 0, 0, 0.04);
+          margin-right: 8px;
+          cursor: pointer;
+          span{
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.6);
+            margin-top: 16px;
+          }
+        }
+        &_item:last-child{
+          margin-right: 0px;
+        }
+      }
+    }
+  .textBox{
+      margin-top: 21px;
+    &_name{
+      line-height: 14px;
+      color: rgba(0, 0, 0, 0.6);
+      margin-left: 21px;
+    }
+    &_context{
+      display: flex;
+      justify-content: space-between;
+      margin-left: 10px;
+      margin-top: 21px;
+      &_item{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        box-sizing: border-box;
+        width: 96px;
+        height: 92px;
+        border-radius: 8px;
+        background-color: rgba(0, 0, 0, 0.04);
+        span{
+          font-size: 14px;
+          color: rgba(0, 0, 0, 0.6);
+          margin-top: 16px;
+        }
+        &_img{
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+  }
+  }
+  .options{
+    position: absolute;
+    right: -20px;
+    background-image: url('../../image/centerLeft.png');
+    background-size: 100%;
+    width: 20px;
+    height: 64px;
+    text-align: center;
+    line-height: 64px;
+    cursor: pointer;
+    z-index: 5;
+  }
+}
+
