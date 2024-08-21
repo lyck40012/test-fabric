@@ -1,9 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import style from  './index.less'
-import {CanvasContext} from "@/pages/TableList";
+import {getGlobalValue, setGlobalValue} from "@/plugin/useGlobalState";
 let activeEl:any = null
 const RightMenu = () => {
-  const  { canvas } = useContext(CanvasContext);
+  let canvas = getGlobalValue('canvasExample')
+
   const [menuPosition, setMenuPosition] = useState<any>();
   useEffect(() => {
     if(canvas){
@@ -21,14 +22,13 @@ const RightMenu = () => {
     `;
     activeEl = null;
   }
-  const  canvasOnMouseDown  = (opt)=>{
+  const  canvasOnMouseDown  = (opt:any)=>{
     if(opt.button === 3 && opt.target){
       const menuWidth = menuPosition.offsetWidth;
       const menuHeight = menuPosition.offsetHeight;
       activeEl = opt.target;
       let pointX = opt.pointer.x;
       let pointY = opt.pointer.y;
-      console.log(pointX)
       // 计算菜单出现的位置
       // 如果鼠标靠近画布右侧，菜单就出现在鼠标指针左侧
       if (canvas.width - pointX <= menuWidth) {
