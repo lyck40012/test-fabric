@@ -16,12 +16,11 @@ const CenterLeft = () => {
   }
   const addRect = (event?:any)=>{
     const rect = new fabric.Rect({
-      width: 50,
-      height: 50,
+      width: 100,
+      height: 100,
       fill: '#FFFFCC',
       stroke: 'black',
       strokeWidth: 2,
-      customData: { id: 1, name: 'rectangle1' }
     });
     addBaseType(rect,{ center: true, event })
     setActiveType(rect.type)

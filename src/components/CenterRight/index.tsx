@@ -3,24 +3,21 @@ import  style from "./index.less"
 import {LeftOutlined, RightOutlined} from "@ant-design/icons";
 import { InputNumber} from "antd";
 import {CanvasContext} from "@/pages/TableList";
-import {getGlobalAllValue} from "@/plugin/useGlobalState";
-type InputNumberProps = 1 | 1920 |1080| null | undefined |number
+type InputNumberProps =  number | null | undefined
 import GoodsList from  "@/components/GoodsList"
+import  { setSize,option } from "@/plugin/ApplicationEntrancePlugin"
 const CenterRight = () => {
-  const  { canvasSizeObj,activeType } = useContext(CanvasContext);
-  const { canvasExample  } = getGlobalAllValue()
+  const  { activeType } = useContext(CanvasContext);
   const [isShow, setIsShow] = useState(true);
-  const [width, setWidth] = useState<InputNumberProps>(canvasSizeObj.width);
-  const [height, setHeight] = useState<InputNumberProps>(canvasSizeObj.height);
-  const handleInputNumberWidthChange = (val:1 | 1920 | null)=>{
+  const [width, setWidth] = useState<InputNumberProps>(option.width);
+  const [height, setHeight] = useState<InputNumberProps>(option.height);
+  const handleInputNumberWidthChange = (val:InputNumberProps)=>{
     setWidth(val)
-    canvasExample.setWidth(val);
-    canvasExample.renderAll()
+    setSize(val,height)
   }
-  const handleInputNumberHeightChange = (val:1 | 1080 | null)=>{
+  const handleInputNumberHeightChange = (val:InputNumberProps)=>{
     setHeight(val)
-    canvasExample.setHeight(val);
-    canvasExample.renderAll()
+    setSize(width,val)
   }
   return (
     <div className={style.centerRight} style={{width:!isShow&&3}}>
@@ -29,9 +26,9 @@ const CenterRight = () => {
         {!activeType && <div className={style.rightSider_sizeBox}>
           <div className={style.rightSider_sizeBox_name}>尺寸</div>
           <div className={style.rightSider_sizeBox_box}>
-            <InputNumber prefix='宽度' variant="filled" value={width} max={1900} min={1}
+            <InputNumber prefix='宽度' variant="filled" value={width}  min={1}
                          onChange={handleInputNumberWidthChange}/>
-            <InputNumber prefix='高度' variant="filled" value={height} max={1080} min={1}
+            <InputNumber prefix='高度' variant="filled" value={height}  min={1}
                          onChange={handleInputNumberHeightChange}/>
           </div>
         </div>}

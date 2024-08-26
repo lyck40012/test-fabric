@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {fabric} from 'fabric'
 import style from "./index.less"
 import  Tools from "./Tools";
-import  { canvasSize } from "@/plugin/modelZoomPlugin";
 import History from "@/components/History";
 import {Button, Divider,  Layout, Select, Space, Tooltip} from 'antd';
 import AddIText from "@/image/addIText.png";
@@ -11,17 +10,16 @@ import CenterLeft from "@/components/CenterLeft";
 import CenterRight from "@/components/CenterRight";
 import RightMenu from "@/components/RightMenu";
 import {setGlobalValue} from "@/plugin/useGlobalState"
+import {entranceInit} from "@/plugin/ApplicationEntrancePlugin";
+import {initDringPlugin} from "@/plugin/DringPlugin";
+import DateSelectType from "@/components/DateSelectType";
 const { Header} = Layout;
 export const CanvasContext = React.createContext({})
 const MyComponent = () => {
-  const [canvasSizeObj,setCanvasSizeObj] = useState<any>({
-    width: 700,
-    height: 600,
-  })
   const [activeType, setActiveType] = useState<string>('')
+  // const [canvas,setCanvas] = useState<any>()
   useEffect(() => {
     const canvas = new fabric.Canvas('canvas',{
-      backgroundColor: '#fff', // 背景色
       fireRightClick: true,
       stopContextMenu: true,
       preserveObjectStacking: true
@@ -32,6 +30,9 @@ const MyComponent = () => {
         setActiveType(canvas.getActiveObject()?.type)
       }
     });
+    // 入口
+    initDringPlugin(canvas)
+    entranceInit(canvas)
     // 重写 toObject 方法以包含自定义数据
     fabric.Rect.prototype.toObject = (function(toObject) {
       return function() {
@@ -40,16 +41,11 @@ const MyComponent = () => {
         });
       };
     })(fabric.Rect.prototype.toObject);
-    canvasSize(canvas)
     setGlobalValue('canvasExample',canvas)
-    var myDiv:any = document.getElementById('rightDev');
-    myDiv.addEventListener('contextmenu', function(event:any) {
-      event.preventDefault(); // 阻止默认的右键菜单
-    });
   }, []);
 
   return (
-    <CanvasContext.Provider value={{canvasSizeObj,activeType , setActiveType}}>
+    <CanvasContext.Provider value={{activeType , setActiveType}}>
       {/*<Tools />*/}
       <Layout className={style.content}>
         {/*头部*/}
@@ -67,6 +63,7 @@ const MyComponent = () => {
               },
             ]} />
           <Space>
+            <DateSelectType />
             <History />
             <Divider type='vertical' />
             <Tooltip title="添加文字">
@@ -79,11 +76,9 @@ const MyComponent = () => {
         </Header>
         <div className={style.canvasContent}>
           <CenterLeft />
-          <div className={style.workspace}  >
-            <div style={{position:'relative',top:10}} id="rightDev">
-              <canvas id='canvas' width={canvasSizeObj.width} height={canvasSizeObj.height}></canvas>
-              <RightMenu/>
-            </div>
+          <div className={style.workspace} id='workspace'>
+            <canvas id='canvas'></canvas>
+            <RightMenu/>
           </div>
           <CenterRight/>
         </div>

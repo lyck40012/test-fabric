@@ -4,7 +4,6 @@ import {getGlobalValue, setGlobalValue} from "@/plugin/useGlobalState";
 let activeEl:any = null
 const RightMenu = () => {
   let canvas = getGlobalValue('canvasExample')
-
   const [menuPosition, setMenuPosition] = useState<any>();
   useEffect(() => {
     if(canvas){
@@ -23,7 +22,7 @@ const RightMenu = () => {
     activeEl = null;
   }
   const  canvasOnMouseDown  = (opt:any)=>{
-    if(opt.button === 3 && opt.target){
+    if(opt.button === 3 && opt.target&&opt.target.id!=="workspace"){
       const menuWidth = menuPosition.offsetWidth;
       const menuHeight = menuPosition.offsetHeight;
       activeEl = opt.target;
