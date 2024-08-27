@@ -19,7 +19,7 @@ const GoodsList = () => {
     selectRect?.set('stroke', '#000')
     let  filterArr = list.filter(x=>itemArr.includes(x.id))
     filterArr.forEach(x=>{
-      const text = new fabric.IText(`${x.hangType}   ${x.name}`, {
+      const text = new fabric.IText(`${x.hangType}   ${x.name} \n x${x.num}`, {
         lockScalingX: true,
         lockScalingY: true,
         fontSize:30
