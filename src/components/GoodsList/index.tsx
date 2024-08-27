@@ -15,7 +15,6 @@ const GoodsList = () => {
     {id: 2, name: '长袖', num: 10, hangType: '侧挂'},
   ])
   const handleDragEnd = (event: any) => {
-    // console.log(selectRect)
     selectRect?.set('stroke', '#000')
     let  filterArr = list.filter(x=>itemArr.includes(x.id))
     filterArr.forEach(x=>{
@@ -59,8 +58,7 @@ const GoodsList = () => {
     })
     if (result) {
       let  filterArr = list.filter(x=>itemArr.includes(x.id))
-      selectRect.set('stroke', 'red')
-      // selectRect.set('strokeWidth', '5')
+      selectRect.set('stroke', '#5a9fff')
       selectRect.set('customData', filterArr)
       canvas.renderAll();
     } else {

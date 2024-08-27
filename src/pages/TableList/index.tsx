@@ -76,12 +76,12 @@ const MyComponent = () => {
           <SaveOptions />
         </Header>
         <div className={style.canvasContent}>
-          <CenterLeft />
+          <CenterLeft  />
           <div className={style.workspace} id='workspace'>
             <canvas id='canvas'></canvas>
             <RightMenu/>
           </div>
-          <CenterRight/>
+          <CenterRight />
         </div>
       </Layout>
     </CanvasContext.Provider>

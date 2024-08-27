@@ -21,7 +21,7 @@ const CenterRight = () => {
     setSize(width,val)
   }
   return (
-    <div className={style.centerRight} style={{width:!isShow&&3}}>
+    <div className={style.centerRight} style={{width:!isShow&&0}}>
       <div className={style.rightSider} >
         <div className={style.rightSider_name} style={{border:!isShow&&'none'}}>货架商品</div>
         {!activeType && <div className={style.rightSider_sizeBox}>
@@ -35,7 +35,6 @@ const CenterRight = () => {
         </div>}
          {/*活动对象属性*/}
         {activeType && <AttributePosition />}
-
          {/*商品列表*/}
         <GoodsList />
       </div>
