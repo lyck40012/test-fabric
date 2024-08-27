@@ -4,7 +4,6 @@ import AddIText from "@/image/addIText.png";
 import shelves1 from "@/image/shelves/shelves1.png"
 import {LeftOutlined, RightOutlined} from '@ant-design/icons';
 import {fabric} from 'fabric'
-import {getGlobalValue} from "@/plugin/useGlobalState";
 import {CanvasContext} from "@/pages/TableList";
 import {addBaseType} from "@/plugin/AddBaseTypePlugin"
 const CenterLeft = () => {
@@ -15,12 +14,13 @@ const CenterLeft = () => {
     setType(type);
   }
   const addRect = (event?:any)=>{
-    const rect = new fabric.Rect({
+    const  rect= new fabric.Rect({
       width: 100,
       height: 100,
-      fill: '#FFFFCC',
-      stroke: 'black',
-      strokeWidth: 2,
+      stroke:'#000',
+      strokeWidth:2,
+      fill:'transparent',
+      strokeUniform: true
     });
     addBaseType(rect,{ center: true, event })
     setActiveType(rect.type)

@@ -1,11 +1,29 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, Space} from "antd";
 import {BarChartOutlined, SaveOutlined, SyncOutlined} from "@ant-design/icons";
-import {getGlobalAllValue, getGlobalValue} from "@/plugin/useGlobalState";
+import {getGlobalAllValue} from "@/plugin/useGlobalState";
+import {downFile} from "@/utils/utils";
+import {CanvasContext} from "@/pages/TableList";
 
 const SaveOptions = () => {
+  const  { canvas } = useContext(CanvasContext);
   const handleSave = ()=>{
-    console.log("!23123131====>",getGlobalAllValue())
+    const  dataUrl  = canvas.toJSON([
+      'id',
+      'gradientAngle',
+      'selectable',
+      'hasControls',
+      'linkData',
+      'editable',
+      'extensionType',
+      'extension',
+      'verticalAlign',
+      'roundValue',
+    ])
+    const fileStr = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(dataUrl, null, '\t')
+    )}`;
+    downFile('测试JSON',fileStr, 'json');
   }
   return (
     <Space>

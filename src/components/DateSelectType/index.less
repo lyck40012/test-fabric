@@ -2,3 +2,59 @@
   display: flex;
   align-items: center;
 }
+.datebox{
+  position: relative;
+  margin-left: 20px;
+  span{
+    cursor: pointer;
+    line-height: 14px;
+  }
+  &_content{
+    position: absolute;
+    width: 232px;
+    border-radius: 8px;
+    background-color: red;
+    z-index: 20;
+    padding-top: 12px;
+    &_title{
+      font-size: 14px;
+      font-weight: bold;
+      color: rgba(0, 0, 0, 0.85);
+      line-height: 14px;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    &_item{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      line-height: 12px;
+      padding: 15px 12px;
+      border-top: 0.5px solid #D8D8D8;
+      &_left{
+        display: flex;
+        font-size: 12px;
+        font-weight: bold;
+        color: rgba(0, 0, 0, 0.85);
+        img{
+          margin-left: 8px;
+        }
+      }
+      &_right{
+        cursor: pointer;
+      }
+    }
+    &_addLayout{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 12px;
+      border-top: 0.5px solid #D8D8D8;
+        &_left{
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.6);
+          line-height: 12px;
+        }
+    }
+  }
+}

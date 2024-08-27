@@ -17,19 +17,20 @@ const { Header} = Layout;
 export const CanvasContext = React.createContext({})
 const MyComponent = () => {
   const [activeType, setActiveType] = useState<string>('')
-  // const [canvas,setCanvas] = useState<any>()
+  const [canvas,setCanvas] = useState<any>()
   useEffect(() => {
     const canvas = new fabric.Canvas('canvas',{
       fireRightClick: true,
       stopContextMenu: true,
       preserveObjectStacking: true
     });
-    canvas.on('mouse:down', (opt)=>{
+    canvas.on('mouse:down', (opt:any)=>{
       if(opt.button === 1){
         setGlobalValue('canvasActiveType',canvas.getActiveObject()?.type)
         setActiveType(canvas.getActiveObject()?.type)
       }
     });
+    setCanvas(canvas)
     // 入口
     initDringPlugin(canvas)
     entranceInit(canvas)
@@ -45,7 +46,7 @@ const MyComponent = () => {
   }, []);
 
   return (
-    <CanvasContext.Provider value={{activeType , setActiveType}}>
+    <CanvasContext.Provider value={{activeType , setActiveType ,canvas}}>
       {/*<Tools />*/}
       <Layout className={style.content}>
         {/*头部*/}

@@ -6,6 +6,7 @@ import {CanvasContext} from "@/pages/TableList";
 type InputNumberProps =  number | null | undefined
 import GoodsList from  "@/components/GoodsList"
 import  { setSize,option } from "@/plugin/ApplicationEntrancePlugin"
+import AttributePosition from "@/components/AttributePosition";
 const CenterRight = () => {
   const  { activeType } = useContext(CanvasContext);
   const [isShow, setIsShow] = useState(true);
@@ -24,7 +25,7 @@ const CenterRight = () => {
       <div className={style.rightSider} >
         <div className={style.rightSider_name} style={{border:!isShow&&'none'}}>货架商品</div>
         {!activeType && <div className={style.rightSider_sizeBox}>
-          <div className={style.rightSider_sizeBox_name}>尺寸</div>
+          <div className={style.rightSider_sizeBox_name}>画布尺寸</div>
           <div className={style.rightSider_sizeBox_box}>
             <InputNumber prefix='宽度' variant="filled" value={width}  min={1}
                          onChange={handleInputNumberWidthChange}/>
@@ -32,6 +33,10 @@ const CenterRight = () => {
                          onChange={handleInputNumberHeightChange}/>
           </div>
         </div>}
+         {/*活动对象属性*/}
+        {activeType && <AttributePosition />}
+
+         {/*商品列表*/}
         <GoodsList />
       </div>
       <div onClick={() => setIsShow(!isShow)} className={style.options}>
