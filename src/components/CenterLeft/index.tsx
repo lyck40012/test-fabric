@@ -7,7 +7,7 @@ import {fabric} from 'fabric'
 import {CanvasContext} from "@/pages/TableList";
 import {addBaseType} from "@/plugin/AddBaseTypePlugin"
 import GoodsInfo from "./GoodsInfo";
-import Arrow from  "@/image/arrow.png"
+import arrow from  "@/image/arrow.png"
 const CenterLeft = () => {
   const { setActiveType,canvas } = useContext(CanvasContext)
   const [type, setType] = useState('goods');
@@ -26,31 +26,12 @@ const CenterLeft = () => {
       strokeUniform: true
     });
     addBaseType(rect,{ center: true, event })
-    const { x,y } = rect.getCenterPoint()
-    fabric.util.loadImage(Arrow,(img)=>{
+    fabric.util.loadImage(arrow,(img)=>{
       rect.setPatternFill({
         source:img,
         repeat:'repeat'
       })
     })
-    // fabric.Image.fromURL(Arrow, function(img:any) {
-    //   console.log("img===>",img)
-    //   // 当图片加载完成后，添加到画布上
-    //   // 设置图片位置（可选）
-    //   img.left = x-25;
-    //   img.uid = `img-${rect.uid}`
-    //   img.top = y-25;
-    //   img.scaleToWidth(50);
-    //   // img.selectable =false;
-    //   img.hasControls =false
-    //   img.evented = false
-    //   img.lockScalingX =true
-    //   img.lockScalingY = true
-    //   // 禁止选择img.hasControls= false,  // 禁止缩放和旋转
-    //   // 渲染画布
-    //   canvas.add(img);
-    //   canvas.renderAll();
-    // });
     setActiveType(rect.type)
     console.log(canvas.getObjects().find((item) => item.id === 'workspace'))
   }
