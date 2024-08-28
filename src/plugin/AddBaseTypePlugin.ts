@@ -4,7 +4,7 @@ import {handleCenter} from "@/plugin/CenterAlignPlugin";
 import {v4 as uuid} from 'uuid';
 
 interface optionsProps {
-  event: any;
+  event?: any;
   center: boolean;
 }
 let  canvas:any
@@ -30,7 +30,7 @@ export const handleDragPosition = (item: fabric.Object, event) => {
 export const addBaseType = (item: fabric.Object, options?: optionsProps) => {
   canvas = getGlobalValue('canvasExample')
   const {event = false, center = true} = options || {};
-  item.set({id: uuid()});
+  item.set({uid: uuid(),});
   if (event) {
     let pointerVpt = handleDragPosition(item, event)
     item.set({left: pointerVpt.x, top: pointerVpt.y,});

@@ -38,13 +38,25 @@ const MyComponent = () => {
     fabric.Rect.prototype.toObject = (function(toObject) {
       return function() {
         return fabric.util.object.extend(toObject.call(this), {
-          customData: this.customData
+          customData: this.customData,
+          id: this.id,
+          uid: this.uid,
+          selectable: this.selectable,
+          hasControls: this.hasControls,
+          hoverCursor: this.hoverCursor
         });
       };
     })(fabric.Rect.prototype.toObject);
     setGlobalValue('canvasExample',canvas)
   }, []);
-
+  useEffect(()=>{
+    let footer = document.getElementsByTagName('footer')
+    console.dir(footer[0])
+    footer[0].style.display="none"
+    return ()=>{
+      footer[0].style.display="block"
+    }
+  },[])
   return (
     <CanvasContext.Provider value={{activeType , setActiveType ,canvas}}>
       {/*<Tools />*/}

@@ -59,18 +59,35 @@
       border-radius: 4px;
     }
   }
-
+  &_goodsList::-webkit-scrollbar {  /*滚动条整体样式*/
+    width: 5px;            /*高宽分别对应横竖滚动条的尺寸*/
+    height: 0;
+  }
+  &_goodsList::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: #ebebeb;
+  }
+  &_goodsList::-webkit-scrollbar-track { /*滚动条里面轨道*/
+    /* -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); */
+    border-radius: 10px;
+    background: #fff;
+  }
   &_goodsList {
     width: 324px;
+    height: 550px;
     box-sizing: border-box;
-    overflow: auto;
+    overflow-y: scroll;
     padding: 7px 11px;
-      padding-right: 0px;
+    padding-right: 0px;
+
     &_item {
       display: flex;
       height: 88px;
+      cursor: pointer;
       &_left {
         position: relative;
+
         &_img {
           width: 86px;
           height: 88px;
@@ -93,26 +110,31 @@
           left: -37px;
         }
       }
-      &_right{
-          padding: 6px 8px;
+
+      &_right {
+        padding: 6px 8px;
         width: 225px;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-        &_oneDiv{
+
+        &_oneDiv {
           width: 100%;
           display: flex;
           justify-content: space-between;
-         &_left{
-           color: rgba(0, 0, 0, 0.85);
-           font-size: 12px;
-           span{
-             font-weight: bold;
-           }
-         }
-          &_right{
+
+          &_left {
+            color: rgba(0, 0, 0, 0.85);
+            font-size: 12px;
+
+            span {
+              font-weight: bold;
+            }
+          }
+
+          &_right {
             display: inline-block;
             font-size: 10px;
             padding: 2px 4px;
@@ -121,7 +143,8 @@
             border-radius: 2px;
           }
         }
-        &_twoDiv{
+
+        &_twoDiv {
           width: 100%;
           color: rgba(0, 0, 0, 0.85);
           font-size: 12px;
@@ -129,7 +152,8 @@
           display: flex;
           justify-content: space-between;
           padding-right: 11px;
-          span{
+
+          span {
             display: inline-block;
             width: 150px;
             white-space: nowrap;
@@ -137,17 +161,20 @@
             text-overflow: ellipsis;
           }
         }
-        &_threeDiv{
-          &_price{
+
+        &_threeDiv {
+          &_price {
             color: rgba(0, 0, 0, 0.85);
             font-size: 12px;
           }
-          &_number{
+
+          &_number {
             font-size: 11px;
             color: #9E9E9E;
             margin-left: 4px;
           }
-          &_detail{
+
+          &_detail {
             font-size: 11px;
             color: #1890FF;
             margin-left: 25px;

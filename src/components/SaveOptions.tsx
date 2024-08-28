@@ -10,6 +10,7 @@ const SaveOptions = () => {
   const handleSave = ()=>{
     const  dataUrl  = canvas.toJSON([
       'id',
+      'uid',
       'gradientAngle',
       'selectable',
       'hasControls',

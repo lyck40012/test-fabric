@@ -7,8 +7,9 @@ import {fabric} from 'fabric'
 import {CanvasContext} from "@/pages/TableList";
 import {addBaseType} from "@/plugin/AddBaseTypePlugin"
 import GoodsInfo from "./GoodsInfo";
+import Arrow from  "@/image/arrow.png"
 const CenterLeft = () => {
-  const { setActiveType } = useContext(CanvasContext)
+  const { setActiveType,canvas } = useContext(CanvasContext)
   const [type, setType] = useState('goods');
   const [isShow, setIsShow] = useState(true);
   const changeType = (type: string) => {
@@ -20,11 +21,26 @@ const CenterLeft = () => {
       height: 100,
       stroke:'#000',
       strokeWidth:2,
-      fill:'transparent',
+      // fill:'transparent',
+      fill:'#999999',
       strokeUniform: true
     });
     addBaseType(rect,{ center: true, event })
+    const { x,y } = rect.getCenterPoint()
+    fabric.Image.fromURL(Arrow, function(img:any) {
+      // 当图片加载完成后，添加到画布上
+      // 设置图片位置（可选）
+      img.left = x-25;
+      img.uid = `img-${rect.uid}`
+      img.top = y-25;
+      img.scaleToWidth(50);
+      img.selectable =false;   // 禁止选择img.hasControls= false,  // 禁止缩放和旋转
+      // 渲染画布
+      canvas.add(img);
+      canvas.renderAll();
+    });
     setActiveType(rect.type)
+    console.log(canvas.getObjects().find((item) => item.id === 'workspace'))
   }
     return (
     <div className={style.centerLeft} style={{width:!isShow&&0}}>

@@ -79,7 +79,7 @@ const _initWorkspace = () => {
     id: 'workspace',
     strokeWidth: 0,
     hasControls:false,
-    selectable:false
+    selectable:false,
   });
   workspaceRect.hoverCursor = 'default';
   canvas.add(workspaceRect);
