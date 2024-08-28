@@ -27,18 +27,30 @@ const CenterLeft = () => {
     });
     addBaseType(rect,{ center: true, event })
     const { x,y } = rect.getCenterPoint()
-    fabric.Image.fromURL(Arrow, function(img:any) {
-      // 当图片加载完成后，添加到画布上
-      // 设置图片位置（可选）
-      img.left = x-25;
-      img.uid = `img-${rect.uid}`
-      img.top = y-25;
-      img.scaleToWidth(50);
-      img.selectable =false;   // 禁止选择img.hasControls= false,  // 禁止缩放和旋转
-      // 渲染画布
-      canvas.add(img);
-      canvas.renderAll();
-    });
+    fabric.util.loadImage(Arrow,(img)=>{
+      rect.setPatternFill({
+        source:img,
+        repeat:'repeat'
+      })
+    })
+    // fabric.Image.fromURL(Arrow, function(img:any) {
+    //   console.log("img===>",img)
+    //   // 当图片加载完成后，添加到画布上
+    //   // 设置图片位置（可选）
+    //   img.left = x-25;
+    //   img.uid = `img-${rect.uid}`
+    //   img.top = y-25;
+    //   img.scaleToWidth(50);
+    //   // img.selectable =false;
+    //   img.hasControls =false
+    //   img.evented = false
+    //   img.lockScalingX =true
+    //   img.lockScalingY = true
+    //   // 禁止选择img.hasControls= false,  // 禁止缩放和旋转
+    //   // 渲染画布
+    //   canvas.add(img);
+    //   canvas.renderAll();
+    // });
     setActiveType(rect.type)
     console.log(canvas.getObjects().find((item) => item.id === 'workspace'))
   }
