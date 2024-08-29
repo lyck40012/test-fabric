@@ -30,7 +30,8 @@ export const handleDragPosition = (item: fabric.Object, event) => {
 export const addBaseType = (item: fabric.Object, options?: optionsProps) => {
   canvas = getGlobalValue('canvasExample')
   const {event = false, center = true} = options || {};
-  item.set({uid: uuid(),});
+  let uid = item.get('uid')
+  item.set({uid:uid ?uid: uuid()});
   if (event) {
     let pointerVpt = handleDragPosition(item, event)
     item.set({left: pointerVpt.x, top: pointerVpt.y,});

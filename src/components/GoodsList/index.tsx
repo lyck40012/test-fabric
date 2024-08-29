@@ -15,13 +15,13 @@ const GoodsList = () => {
     {id: 2, name: '长袖', num: 10, hangType: '侧挂'},
   ])
   const handleDragEnd = (event: any) => {
-    selectRect?.set('stroke', '#000')
+    selectRect?.set('stroke', '#666666')
     let  filterArr = list.filter(x=>itemArr.includes(x.id))
     filterArr.forEach(x=>{
       const text = new fabric.IText(`${x.hangType}   ${x.name} \n x${x.num}`, {
-        lockScalingX: true,
-        lockScalingY: true,
-        fontSize:30
+        // lockScalingX: true,
+        // lockScalingY: true,
+        fontSize:20
         });
       addBaseType(text, {center: true, event})
     })
@@ -62,7 +62,7 @@ const GoodsList = () => {
       selectRect.set('customData', filterArr)
       canvas.renderAll();
     } else {
-      selectRect?.set('stroke', '#000')
+      selectRect?.set('stroke', '#666666')
       delete selectRect?.customData;
       selectRect?.set({ customData: null });
       selectRect = null

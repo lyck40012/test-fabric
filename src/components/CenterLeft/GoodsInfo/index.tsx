@@ -1,89 +1,172 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import style from "./index.less"
 import {Button, Checkbox, Input, message} from 'antd';
-import { SearchOutlined} from "@ant-design/icons";
+import {SearchOutlined} from "@ant-design/icons";
 import FilterIcon from "@/image/FilterIcon.png"
 import Yif from "./yif.png"
-import { fabric } from "fabric"
+import {fabric} from "fabric"
 import {CanvasContext} from "@/pages/TableList";
 import {addBaseType} from "@/plugin/AddBaseTypePlugin";
+import arrow from  "@/image/arrow.png"
+let lastRef: any = {}
+let isArea:boolean = false;
 const Index = () => {
-
-  const { canvas } = useContext(CanvasContext)
-  const [selectItemArr, setSelectItemArr] = React.useState<any[]>([]);
-  const goodsType =[
-    { id:1, name:"童装" },
-    { id:2, name:"男装" },
-    { id:3, name:"女装" },
-    { id:4, name:"其他" },
+  const {canvas} = useContext(CanvasContext)
+  const [selectTypeArr, setSelectTypeArr] = React.useState<any[]>([]);
+  const [selectItemList, setSelectItemList] = React.useState<any[]>([]);
+  const [goodsList,setGoodsList] = useState([
+    {id: 1, name: '女装', slider: '正挂', price: '13.2', inventoryNum: 12, placedNum: 34},
+    {id: 2, name: '羊毛衫', slider: '侧挂挂', price: '165.2', inventoryNum: 54, placedNum: 234},
+    {id: 3, name: '羊毛衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
+    {id: 4, name: '羊毛43衫', slider: '正挂', price: '165.2', inventoryNum: 54, placedNum: 234},
+    {id: 5, name: '羊毛34衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
+    {id: 6, name: '羊毛23衫', slider: '正挂', price: '165.2', inventoryNum: 54, placedNum: 234},
+    {id: 7, name: '羊毛3衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
+    {id: 8, name: '羊毛衫', slider: '正挂', price: '165.2', inventoryNum: 54, placedNum: 234},
+  ])
+  const goodsType = [
+    {id: 1, name: "童装"},
+    {id: 2, name: "男装"},
+    {id: 3, name: "女装"},
+    {id: 4, name: "其他"},
   ]
+  //   100          1 50   2
 
-  const goodsList = [
-    {id:1,name:'女装',slider:'正挂',price:'13.2',inventoryNum:12,placedNum:34},
-    {id:2,name:'羊毛衫',slider:'侧挂挂',price:'165.2',inventoryNum:54,placedNum:234},
-    {id:3,name:'羊毛衫',slider:'侧挂',price:'165.2',inventoryNum:54,placedNum:234},
-    {id:4,name:'羊毛衫',slider:'侧挂挂',price:'165.2',inventoryNum:54,placedNum:234},
-    {id:5,name:'羊毛衫',slider:'侧挂挂',price:'165.2',inventoryNum:54,placedNum:234},
-    {id:6,name:'羊毛衫',slider:'侧挂挂',price:'165.2',inventoryNum:54,placedNum:234},
-    {id:7,name:'羊毛衫',slider:'侧挂挂',price:'165.2',inventoryNum:54,placedNum:234},
-    {id:8,name:'羊毛衫',slider:'侧挂挂',price:'165.2',inventoryNum:54,placedNum:234},
-  ]
-  const handleClick = (val:any)=>{
-    let arr = [...selectItemArr]
-    let index = arr.findIndex((item) =>item===val.id)
-    if(index!==-1){
+   // 重新排列
+  const  handleReArrangement = ()=>{
+    let activeObject = canvas.getActiveObject()
+    let boundingRect = activeObject.getBoundingRect()
+    let uid = activeObject.get('uid')
+    let allObj = canvas.getObjects().filter((item:fabric.Object)=>(item.type==='i-text'&&item.uid.includes(uid)))
+    console.log("allObj====>",allObj)
+    console.log()
+    const {x, y} = activeObject.getCenterPoint()
+    let height = Math.floor(boundingRect.height)
+  }
+  const handleClick = (val: any) => {
+    let arr = [...selectTypeArr]
+    let index = arr.findIndex((item) => item === val.id)
+    if (index !== -1) {
       arr.splice(index, 1)
-    }else {
+    } else {
       arr.push(val.id)
     }
-    setSelectItemArr(arr)
+    setSelectTypeArr(arr)
   }
-  const handleAddShelves = ()=>{
+  const handleAddShelves = () => {
     let activeObject = canvas.getActiveObject()
-    if(activeObject){
-      activeObject.set('fill','transparent')
-      const { x,y } = activeObject.getCenterPoint()
-      const text = new fabric.IText(`正挂  长袖 \n x32`, {
-        lockScalingX: true,
-        lockScalingY: true,
-        fontSize:24,
-      });
-      const { width,height } = text
-      text.set('left',x-width/2)
-      text.set('top',y-height/2)
-      addBaseType(text, {center: false})
-    }else {
+    if (activeObject) {
+      let uid = activeObject.get('uid')
+      let customData = activeObject.get('customData') ||[]
+      activeObject.set('fill', 'transparent')
+      const {x, y} = activeObject.getCenterPoint()
+        let filterArr = goodsList.filter(x => selectItemList.includes(x.id)) ||[]
+      let customDataArr =  [...customData,...filterArr]
+      activeObject?.set('customData', customDataArr)
+      filterArr.forEach((item:any)=>{
+        const text = new fabric.IText(`${item.slider}   ${item.name}`, {
+          lockScalingX: true,
+          lockScalingY: true,
+          lockMovementX:true,
+          fontSize: 15,
+          uid:`iText/${uid}/${item.id}`,
+        });
+        const {width, height} = text
+        text.set('left', x - width / 2)
+        text.set('top', y - height / 2)
+        canvas.add(text);
+        canvas.renderAll();
+      })
+      // 重新排列
+      handleReArrangement()
+    } else {
       message.error('请选择要添加的货价')
     }
   }
-  const handleDragItemEnd = (event:any)=>{
+  const onDragStart = (event: any) => {
+    event.dataTransfer.setDragImage(new Image(), 0, 0);
+  }
+  const handleDragItemEnd = (event: any) => {
     let activeObject = canvas.getActiveObject()
-    if(activeObject){
-      activeObject.set('fill','transparent')
-      const text = new fabric.IText(`正挂  长袖 \n x32`, {
-        fontSize:24,
-      });
-      addBaseType(text, {center: false,event})
-    }else {
-      message.error('请选择要添加的货价')
+    if (activeObject&&isArea&&activeObject.type==='rect') {
+      let uid = activeObject.get('uid')
+      let customData = activeObject.get('customData') ||[]
+      activeObject?.set('stroke', '#666666')
+      activeObject?.set('fill', 'transparent')
+      let filterArr = goodsList.filter(x => selectItemList.includes(x.id))
+      let customDataArr =  [...customData,...filterArr]
+      activeObject?.set('customData', customDataArr)
+      filterArr.forEach(x => {
+        const text = new fabric.IText(`${x.slider}   ${x.name}`, {
+          fontSize: 15,
+          uid:`iText/${uid}/${x.id}`,
+        });
+        addBaseType(text, {center: false, event})
+      })
+    } else {
+      if(activeObject)  message.error('请选择要添加的货架')
     }
+  }
+  const handleIsDrag = (position: any) => {
+    let activeObject = canvas.getActiveObject()
+    if (activeObject&&activeObject.type==='rect') {
+      let {left, top, width, height} = activeObject?.getBoundingRect()
+      if (left <= position.x && left + width >= position.x &&top <= position.y &&top + height >= position.y) {
+        activeObject?.set('stroke', '#5a9fff')
+        activeObject?.set('fill', 'transparent')
+        canvas.renderAll();
+        isArea = true
+      } else if(activeObject?.customData?.length){
+        isArea = false
+        activeObject?.set('stroke', '#666666')
+      }else {
+        isArea = false
+        let img = new Image();
+        img.src = arrow;
+        img.onload = function () {
+          let pattern = new fabric.Pattern({
+            source: img,
+            repeat: 'no-repeat'
+          });
+          activeObject?.set('stroke', '#666666')
+          activeObject?.set('fill', pattern)
+          activeObject = null
+          canvas.renderAll();
+        }
+      }
+    }
+  }
+  const handleOnDrag = (event: any) => {
+    if (event?.pageX !== lastRef?.pageX || event?.pageY !== lastRef?.pageY) {
+      const {left, top} = canvas.getSelectionElement().getBoundingClientRect();
+      const point = {
+        x: event.pageX - left,
+        y: event.pageY - top,
+      };
+      handleIsDrag(point)
+    }
+    lastRef = {
+      pageX: event.pageX,
+      pageY: event.pageY
+    }
+    // handleIsDrag(canvas.restorePointerVpt(point))
   }
   return (
     <div className={style.goodsInfo}>
       <div className={style.goodsInfo_search}>
         <span>商品列表</span>
-        <Input  style={{width:200}} placeholder="商品名称" prefix={<SearchOutlined />} />
-        <img src={FilterIcon}  alt=''/>
+        <Input style={{width: 200}} placeholder="商品名称" prefix={<SearchOutlined/>}/>
+        <img src={FilterIcon} alt=''/>
       </div>
       <div className={style.goodsInfo_goodsType}>
-        {goodsType.map((item,index) => (
+        {goodsType.map((item, index) => (
           <div
             style={{
-              border:  selectItemArr.includes(item.id) ?'1px solid red' : '1px solid rgba(0, 0, 0, 0.3)',
-              color: selectItemArr.includes(item.id) ?'red':'#666666'
+              border: selectTypeArr.includes(item.id) ? '1px solid red' : '1px solid rgba(0, 0, 0, 0.3)',
+              color: selectTypeArr.includes(item.id) ? 'red' : '#666666'
             }}
             className={style.goodsInfo_goodsType_item}
-            key={item.id} onClick={()=>handleClick(item)}>{item.name}</div>
+            key={item.id} onClick={() => handleClick(item)}>{item.name}</div>
         ))}
       </div>
       <div className={style.goodsInfo_goodsNum}>
@@ -95,13 +178,14 @@ const Index = () => {
         <Button className={style.goodsInfo_selectBox_right} onClick={handleAddShelves}>添加到选中货架</Button>
       </div>
       <div className={style.goodsInfo_goodsList}>
-        <Checkbox.Group onChange={(e)=>{
-          console.log(e)
+        <Checkbox.Group onChange={(e) => {
+          setSelectItemList(e)
         }}>
-          {goodsList.map((item,index) => (
+          {goodsList.map((item, index) => (
             <div key={item.id}
-
                  className={style.goodsInfo_goodsList_item} draggable
+                 onDragStart={onDragStart}
+                 onDrag={handleOnDrag}
                  onDragEnd={handleDragItemEnd}>
               <div className={style.goodsInfo_goodsList_item_left}>
                 <img className={style.goodsInfo_goodsList_item_left_img} src={Yif} alt=""/>
@@ -121,7 +205,8 @@ const Index = () => {
                 </div>
                 <div className={style.goodsInfo_goodsList_item_right_threeDiv}>
                   <span className={style.goodsInfo_goodsList_item_right_threeDiv_price}>¥{item.price}</span>
-                  <span className={style.goodsInfo_goodsList_item_right_threeDiv_number}>摆放数量 {item.placedNum}件 库存{item.inventoryNum}件</span>
+                  <span
+                    className={style.goodsInfo_goodsList_item_right_threeDiv_number}>摆放数量 {item.placedNum}件 库存{item.inventoryNum}件</span>
                   <span className={style.goodsInfo_goodsList_item_right_threeDiv_detail}>详情</span>
                 </div>
               </div>

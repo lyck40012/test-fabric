@@ -26,7 +26,7 @@ const CenterLeft = () => {
       const  rect= new fabric.Rect({
         width: 180,
         height: 90,
-        stroke:'#51b9f9',
+        stroke:'#666666',
         strokeWidth:2,
         // fill:'transparent',
         fill:pattern,
@@ -35,7 +35,6 @@ const CenterLeft = () => {
       addBaseType(rect,{ center: true, event })
       setActiveType(rect.type)
     }
-    console.log(canvas.getObjects().find((item) => item.id === 'workspace'))
   }
   const handleTextEnd = (event:any)=>{
     const text = new fabric.IText('请输入文字', {

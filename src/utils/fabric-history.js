@@ -60,10 +60,12 @@ fabric.Canvas.prototype._historyInit = function () {
     'gradientAngle',
     'selectable',
     'hasControls',
+    'hoverCursor',
     'linkData',
     'editable',
     'extensionType',
     'extension',
+    'customData'
   ];
   this.historyNextState = this._historyNext();
 
