@@ -41,6 +41,7 @@ const Index = () => {
   const handleAddShelves = ()=>{
     let activeObject = canvas.getActiveObject()
     if(activeObject){
+      activeObject.set('fill','transparent')
       const { x,y } = activeObject.getCenterPoint()
       const text = new fabric.IText(`正挂  长袖 \n x32`, {
         lockScalingX: true,
@@ -58,6 +59,7 @@ const Index = () => {
   const handleDragItemEnd = (event:any)=>{
     let activeObject = canvas.getActiveObject()
     if(activeObject){
+      activeObject.set('fill','transparent')
       const text = new fabric.IText(`正挂  长袖 \n x32`, {
         fontSize:24,
       });

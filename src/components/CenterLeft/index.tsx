@@ -16,24 +16,33 @@ const CenterLeft = () => {
     setType(type);
   }
   const addRect = (event?:any)=>{
-    const  rect= new fabric.Rect({
-      width: 100,
-      height: 100,
-      stroke:'#000',
-      strokeWidth:2,
-      // fill:'transparent',
-      fill:'#999999',
-      strokeUniform: true
-    });
-    addBaseType(rect,{ center: true, event })
-    fabric.util.loadImage(arrow,(img)=>{
-      rect.setPatternFill({
-        source:img,
-        repeat:'repeat'
-      })
-    })
-    setActiveType(rect.type)
+    var img = new Image();
+    img.src = arrow;
+    img.onload = function () {
+      var pattern = new fabric.Pattern({
+        source: img,
+        repeat: 'no-repeat'
+      });
+      const  rect= new fabric.Rect({
+        width: 180,
+        height: 90,
+        stroke:'#51b9f9',
+        strokeWidth:2,
+        // fill:'transparent',
+        fill:pattern,
+        strokeUniform: true
+      });
+      addBaseType(rect,{ center: true, event })
+      setActiveType(rect.type)
+    }
     console.log(canvas.getObjects().find((item) => item.id === 'workspace'))
+  }
+  const handleTextEnd = (event:any)=>{
+    const text = new fabric.IText('请输入文字', {
+      fontSize:24,
+    });
+    addBaseType(text,{ center: true, event })
+    setActiveType(text.type)
   }
     return (
     <div className={style.centerLeft} style={{width:!isShow&&0}}>
@@ -81,7 +90,7 @@ const CenterLeft = () => {
           <div className={style.textBox}>
             <div className={style.textBox_name}>文字</div>
             <div className={style.textBox_context}>
-              <div className={style.textBox_context_item}>
+              <div className={style.textBox_context_item}  draggable onClick={()=>handleTextEnd()} onDragEnd={handleTextEnd}>
                 <img className={style.textBox_context_item_img} src={AddIText} alt=""/>
                 <span>正文</span>
               </div>

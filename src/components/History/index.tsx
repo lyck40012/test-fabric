@@ -3,14 +3,13 @@ import {Button, Divider, Modal, Tooltip} from "antd";
 import Revocation from  "@/image/Revocation.png"
 import Restore from  "@/image/restore.png"
 import ClearCanvas from "@/image/clearCanvas.png"
-import {getGlobalValue} from "@/plugin/useGlobalState";
 import "@/utils/fabric-history.js"
 import { setWorkspaseBg } from "@/plugin/ApplicationEntrancePlugin"
-let canvas :any
+import {CanvasContext} from "@/pages/TableList";
+
 const History = () => {
-  useEffect(() => {
-   canvas =  getGlobalValue('canvasExample')
-  }, [canvas]);
+  const { canvas } = useContext(CanvasContext)
+
   const undo = ()=>{
     canvas.undo()
   }

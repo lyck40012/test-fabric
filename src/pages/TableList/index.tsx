@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {fabric} from 'fabric'
 import style from "./index.less"
-import  Tools from "./Tools";
 import History from "@/components/History";
 import {Button, Divider,  Layout, Select, Space, Tooltip} from 'antd';
 import AddIText from "@/image/addIText.png";
@@ -13,6 +12,7 @@ import {setGlobalValue} from "@/plugin/useGlobalState"
 import {entranceInit} from "@/plugin/ApplicationEntrancePlugin";
 import {initDringPlugin} from "@/plugin/DringPlugin";
 import DateSelectType from "@/components/DateSelectType";
+import {initControls} from "@/plugin/ControlsPlugin";
 const { Header} = Layout;
 export const CanvasContext = React.createContext({})
 const MyComponent = () => {
@@ -34,7 +34,7 @@ const MyComponent = () => {
     // 入口
     initDringPlugin(canvas)
     entranceInit(canvas)
-    // 重写 toObject 方法以包含自定义数据
+    initControls()
     fabric.Rect.prototype.toObject = (function(toObject) {
       return function() {
         return fabric.util.object.extend(toObject.call(this), {
@@ -51,7 +51,6 @@ const MyComponent = () => {
   }, []);
   useEffect(()=>{
     let footer = document.getElementsByTagName('footer')
-    console.dir(footer[0])
     footer[0].style.display="none"
     return ()=>{
       footer[0].style.display="block"
