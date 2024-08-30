@@ -46,12 +46,12 @@ const Index = () => {
     setSelectTypeArr(arr)
   }
   const handleAddRect = (activeObject:any)=>{
-    let group = canvas.getActiveObject()
-    let objectsInGroup = group.getObjects(); // 获取组内的所有对象
+    let groupActive = canvas.getActiveObject()
+    let objectsInGroup = groupActive.getObjects(); // 获取组内的所有对象
     let uid = activeObject.get('uid')
     let customData = activeObject.get('customData') || []
     activeObject?.set('fill', 'transparent')
-    const {x, y} = group.getCenterPoint()
+    const {x, y} = groupActive.getCenterPoint()
     let filterArr = goodsList.filter(x => selectItemList.includes(x.id)) || []
     let customDataArr = [...customData, ...filterArr]
     activeObject?.set('customData', customDataArr)
@@ -61,16 +61,24 @@ const Index = () => {
         uid: `iText/${uid}/${item.id}`,
       });
       objectsInGroup.push(text)
-      const {width, height} = text
-      // text.set('left', x - width / 2)
-      // let iTextTop = getItextTop(group,customDataArr.length)
-      // text.set('top', y - height / 2)
-      // text.set('top', iTextTop)
-      console.log("2324234====>",y - height / 2)
-      // group.addWithUpdate(text);
     })
-    // 重新计算每个 iText 对象的位置，使它们垂直平均分配
-    var spaceBetween = groupHeight / (objectsInGroup.length + 1);
+    // 重新创建一个组
+    let newGroup = new fabric.Group([objectsInGroup[0]], {
+      left: groupActive.left,
+      top: groupActive.top
+    });
+    let iTextAll = objectsInGroup.filter((n)=>n.type==='i-text')
+    if(iTextAll.length){
+      let  { width,height } = iTextAll[0]
+      iTextAll.forEach((item,index) => {
+        item.set('left', x - width / 2)
+        item.set('top', y - height / 2)
+        newGroup.addWithUpdate(item);
+      })
+    }
+    canvas.remove(groupActive);
+// 添加新的组到画布
+    canvas.add(newGroup);
     canvas.renderAll();
   }
   const handleAddShelves = () => {
@@ -78,9 +86,6 @@ const Index = () => {
     if (activeObject) {
       handleAddRect(activeObject)
       // 重新排列
-     setTimeout(()=>{
-       handleReArrangement()
-     },10)
     } else {
       message.error('请选择要添加的货价')
     }
