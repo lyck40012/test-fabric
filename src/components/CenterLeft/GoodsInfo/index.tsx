@@ -7,14 +7,15 @@ import Yif from "./yif.png"
 import {fabric} from "fabric"
 import {CanvasContext} from "@/pages/TableList";
 import {addBaseType} from "@/plugin/AddBaseTypePlugin";
-import arrow from  "@/image/arrow.png"
+import arrow from "@/image/arrow.png"
+
 let lastRef: any = {}
-let isArea:boolean = false;
+let isArea: boolean = false;
 const Index = () => {
   const {canvas} = useContext(CanvasContext)
   const [selectTypeArr, setSelectTypeArr] = React.useState<any[]>([]);
   const [selectItemList, setSelectItemList] = React.useState<any[]>([]);
-  const [goodsList,setGoodsList] = useState([
+  const [goodsList, setGoodsList] = useState([
     {id: 1, name: '女装', slider: '正挂', price: '13.2', inventoryNum: 12, placedNum: 34},
     {id: 2, name: '羊毛衫', slider: '侧挂挂', price: '165.2', inventoryNum: 54, placedNum: 234},
     {id: 3, name: '羊毛衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
@@ -30,18 +31,9 @@ const Index = () => {
     {id: 3, name: "女装"},
     {id: 4, name: "其他"},
   ]
-  //   100          1 50   2
+  // 重新排列
+  const handleReArrangement = () => {
 
-   // 重新排列
-  const  handleReArrangement = ()=>{
-    let activeObject = canvas.getActiveObject()
-    let boundingRect = activeObject.getBoundingRect()
-    let uid = activeObject.get('uid')
-    let allObj = canvas.getObjects().filter((item:fabric.Object)=>(item.type==='i-text'&&item.uid.includes(uid)))
-    console.log("allObj====>",allObj)
-    console.log()
-    const {x, y} = activeObject.getCenterPoint()
-    let height = Math.floor(boundingRect.height)
   }
   const handleClick = (val: any) => {
     let arr = [...selectTypeArr]
@@ -53,32 +45,42 @@ const Index = () => {
     }
     setSelectTypeArr(arr)
   }
+  const handleAddRect = (activeObject:any)=>{
+    let group = canvas.getActiveObject()
+    let objectsInGroup = group.getObjects(); // 获取组内的所有对象
+    let uid = activeObject.get('uid')
+    let customData = activeObject.get('customData') || []
+    activeObject?.set('fill', 'transparent')
+    const {x, y} = group.getCenterPoint()
+    let filterArr = goodsList.filter(x => selectItemList.includes(x.id)) || []
+    let customDataArr = [...customData, ...filterArr]
+    activeObject?.set('customData', customDataArr)
+    filterArr.forEach((item) => {
+      const text = new fabric.IText(`${item.slider}   ${item.name}`, {
+        fontSize: 15,
+        uid: `iText/${uid}/${item.id}`,
+      });
+      objectsInGroup.push(text)
+      const {width, height} = text
+      // text.set('left', x - width / 2)
+      // let iTextTop = getItextTop(group,customDataArr.length)
+      // text.set('top', y - height / 2)
+      // text.set('top', iTextTop)
+      console.log("2324234====>",y - height / 2)
+      // group.addWithUpdate(text);
+    })
+    // 重新计算每个 iText 对象的位置，使它们垂直平均分配
+    var spaceBetween = groupHeight / (objectsInGroup.length + 1);
+    canvas.renderAll();
+  }
   const handleAddShelves = () => {
-    let activeObject = canvas.getActiveObject()
+    let activeObject = canvas.getActiveObject()?.getObjects().find(x => x.type === 'rect')
     if (activeObject) {
-      let uid = activeObject.get('uid')
-      let customData = activeObject.get('customData') ||[]
-      activeObject.set('fill', 'transparent')
-      const {x, y} = activeObject.getCenterPoint()
-        let filterArr = goodsList.filter(x => selectItemList.includes(x.id)) ||[]
-      let customDataArr =  [...customData,...filterArr]
-      activeObject?.set('customData', customDataArr)
-      filterArr.forEach((item:any)=>{
-        const text = new fabric.IText(`${item.slider}   ${item.name}`, {
-          lockScalingX: true,
-          lockScalingY: true,
-          lockMovementX:true,
-          fontSize: 15,
-          uid:`iText/${uid}/${item.id}`,
-        });
-        const {width, height} = text
-        text.set('left', x - width / 2)
-        text.set('top', y - height / 2)
-        canvas.add(text);
-        canvas.renderAll();
-      })
+      handleAddRect(activeObject)
       // 重新排列
-      handleReArrangement()
+     setTimeout(()=>{
+       handleReArrangement()
+     },10)
     } else {
       message.error('请选择要添加的货价')
     }
@@ -87,39 +89,32 @@ const Index = () => {
     event.dataTransfer.setDragImage(new Image(), 0, 0);
   }
   const handleDragItemEnd = (event: any) => {
-    let activeObject = canvas.getActiveObject()
-    if (activeObject&&isArea&&activeObject.type==='rect') {
-      let uid = activeObject.get('uid')
-      let customData = activeObject.get('customData') ||[]
+    let activeObject = canvas.getActiveObject()?.getObjects().find(x => x.type === 'rect')
+    if (activeObject && isArea && activeObject.type === 'rect') {
       activeObject?.set('stroke', '#666666')
-      activeObject?.set('fill', 'transparent')
-      let filterArr = goodsList.filter(x => selectItemList.includes(x.id))
-      let customDataArr =  [...customData,...filterArr]
-      activeObject?.set('customData', customDataArr)
-      filterArr.forEach(x => {
-        const text = new fabric.IText(`${x.slider}   ${x.name}`, {
-          fontSize: 15,
-          uid:`iText/${uid}/${x.id}`,
-        });
-        addBaseType(text, {center: false, event})
-      })
+      handleAddRect(activeObject)
     } else {
-      if(activeObject)  message.error('请选择要添加的货架')
+      if (activeObject) message.error('请选择要添加的货架')
     }
   }
+  // 计算位置
+  const handleCalcPosition = (position: any) => {
+    let {left, top, width, height} = canvas.getActiveObject()?.getBoundingRect()
+    return left <= position.x && left + width >= position.x && top <= position.y && top + height >= position.y
+  }
   const handleIsDrag = (position: any) => {
-    let activeObject = canvas.getActiveObject()
-    if (activeObject&&activeObject.type==='rect') {
-      let {left, top, width, height} = activeObject?.getBoundingRect()
-      if (left <= position.x && left + width >= position.x &&top <= position.y &&top + height >= position.y) {
+    let activeObject = canvas.getActiveObject()?.getObjects().find(x => x.type === 'rect')
+    if (activeObject && activeObject.type === 'rect') {
+      // 计算位置
+      if (handleCalcPosition(position)) {
         activeObject?.set('stroke', '#5a9fff')
         activeObject?.set('fill', 'transparent')
         canvas.renderAll();
         isArea = true
-      } else if(activeObject?.customData?.length){
+      } else if (activeObject?.customData?.length) {
         isArea = false
         activeObject?.set('stroke', '#666666')
-      }else {
+      } else {
         isArea = false
         let img = new Image();
         img.src = arrow;

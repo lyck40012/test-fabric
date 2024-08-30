@@ -5,6 +5,7 @@ import shelves1 from "@/image/shelves/shelves1.png"
 import {LeftOutlined, RightOutlined} from '@ant-design/icons';
 import {fabric} from 'fabric'
 import {CanvasContext} from "@/pages/TableList";
+import {v4 as uuid} from 'uuid';
 import {addBaseType} from "@/plugin/AddBaseTypePlugin"
 import GoodsInfo from "./GoodsInfo";
 import arrow from  "@/image/arrow.png"
@@ -28,12 +29,17 @@ const CenterLeft = () => {
         height: 90,
         stroke:'#666666',
         strokeWidth:2,
+        uid:uuid(),
         // fill:'transparent',
         fill:pattern,
         strokeUniform: true
       });
-      addBaseType(rect,{ center: true, event })
-      setActiveType(rect.type)
+      const group = new fabric.Group([rect],{
+        width: 180,
+        height: 90,
+      })
+      addBaseType(group,{ center: true, event })
+      setActiveType(group.type)
     }
   }
   const handleTextEnd = (event:any)=>{

@@ -49,27 +49,6 @@ const RightMenu = () => {
     }
   }
   const handleDelete = ()=>{
-    let activeObject = canvas.getActiveObject()
-    let uid = activeObject.get('uid')
-    if(activeObject.type==='i-text'){
-      if(uid){
-        let arr = uid?.split('/')
-        let rectId = arr[1]
-        let goodsId = Number(arr[2])
-        let selectRect = canvas.getObjects().find((x:any)=>x.uid===rectId)
-        let customData = selectRect?.get('customData')
-        let filterData = customData?.filter(x=>x.id!==goodsId)
-        selectRect.set('customData', filterData)
-      }
-    }
-    if(activeObject.type==='rect'){
-      let selectRect = canvas.getObjects()
-      selectRect.forEach((item:fabric.object)=>{
-        if(item.uid&&item.uid.includes(uid)){
-          canvas.remove(item);
-        }
-      })
-    }
     canvas.remove(activeEl);
     hiddenMenu();
   }
