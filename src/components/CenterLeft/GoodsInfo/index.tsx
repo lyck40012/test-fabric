@@ -31,8 +31,9 @@ const Index = () => {
     {id: 3, name: "女装"},
     {id: 4, name: "其他"},
   ]
-  // 重新排列
+  // 矩形框内重新分配空间
   const handleReArrangement = () => {
+    let groupActive = canvas.getActiveObject()
 
   }
   const handleClick = (val: any) => {
@@ -51,7 +52,7 @@ const Index = () => {
     let uid = activeObject.get('uid')
     let customData = activeObject.get('customData') || []
     activeObject?.set('fill', 'transparent')
-    const {x, y} = groupActive.getCenterPoint()
+    const {x} = groupActive.getCenterPoint()
     let filterArr = goodsList.filter(x => selectItemList.includes(x.id)) || []
     let customDataArr = [...customData, ...filterArr]
     activeObject?.set('customData', customDataArr)
@@ -70,14 +71,14 @@ const Index = () => {
     let iTextAll = objectsInGroup.filter((n)=>n.type==='i-text')
     if(iTextAll.length){
       let  { width,height } = iTextAll[0]
-      iTextAll.forEach((item,index) => {
+      iTextAll.forEach((item:fabric.object,index:number) => {
         item.set('left', x - width / 2)
-        item.set('top', y - height / 2)
+       let top =  groupActive.top + (2*(index+1)-1)/(iTextAll.length*2)*groupActive.height - height/2
+        item.set('top', top)
         newGroup.addWithUpdate(item);
       })
     }
     canvas.remove(groupActive);
-// 添加新的组到画布
     canvas.add(newGroup);
     canvas.renderAll();
   }
