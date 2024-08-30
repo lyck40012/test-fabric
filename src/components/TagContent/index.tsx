@@ -12,7 +12,7 @@ const TagContent = () => {
     allGroup.forEach((group:any)=>{
       let groupPosition  = group.getBoundingRect()
       console.log("组的位置====>",groupPosition)
-      group.getObjects().filter(m=>m.type==='i-text').forEach(x=>{
+      group.getObjects().filter(m=>m.type==='i-text'&&m.iTextType==='goodsName').forEach(x=>{
         if(x.get('id')/2!==1){
           // console.log(x.getCenterPoint())
           console.log("中心位置===>",x,x.getBoundingRect(true))

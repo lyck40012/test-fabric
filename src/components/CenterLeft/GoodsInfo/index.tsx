@@ -15,7 +15,7 @@ const Index = () => {
   const [selectItemList, setSelectItemList] = React.useState<any[]>([]);
   const [goodsList, setGoodsList] = useState([
     {id: 1, name: '女装', slider: '正挂', price: '13.2', inventoryNum: 12, placedNum: 34},
-    {id: 2, name: '羊毛衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
+    {id: 2, name: '羊毛衫大量长毛色染色', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
     {id: 3, name: '羊毛衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
     {id: 4, name: '羊毛43衫', slider: '正挂', price: '165.2', inventoryNum: 54, placedNum: 234},
     {id: 5, name: '羊毛34衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
@@ -48,9 +48,9 @@ const Index = () => {
         item.set('left', groupActive.left+4)
         let top =  groupActive.top + (2*(index+1)-1)/(iTextAll1.length*2)*groupActive.height - height/2
         item.set('top', top)
-        console.log('类型Top',top)
         newGroup.addWithUpdate(item);
       })
+      // 处理名称
       iTextAll2.forEach((item:fabric.object,index:number) => {
       const { height } = iTextAll2[index]
         let  { width } = iTextAll1[index]
@@ -58,7 +58,7 @@ const Index = () => {
         item.set('left', groupActive.left+width+8)
         let top =  groupActive.top + (2*(index+1)-1)/(iTextAll2.length*2)*groupActive.height - height/2
         item.set('top', top)
-        console.log('名字Top',top)
+        item.set('width', 50)
         item.set('itextGroupTop',(2*(index+1)-1)/(iTextAll2.length*2)*groupActive.height)
         newGroup.addWithUpdate(item);
       })
@@ -104,6 +104,7 @@ const Index = () => {
         fontSize: 24,
         id:item.id,
         iTextType: 'goodsName',
+        textAlign: 'left',
         uid: `iText/${uid}/goodsName/${item.id}`,
       });
       objectsInGroup.push(text)
