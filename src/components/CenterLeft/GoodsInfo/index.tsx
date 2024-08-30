@@ -6,9 +6,7 @@ import FilterIcon from "@/image/FilterIcon.png"
 import Yif from "./yif.png"
 import {fabric} from "fabric"
 import {CanvasContext} from "@/pages/TableList";
-import {addBaseType} from "@/plugin/AddBaseTypePlugin";
 import arrow from "@/image/arrow.png"
-
 let lastRef: any = {}
 let isArea: boolean = false;
 const Index = () => {
@@ -17,7 +15,7 @@ const Index = () => {
   const [selectItemList, setSelectItemList] = React.useState<any[]>([]);
   const [goodsList, setGoodsList] = useState([
     {id: 1, name: '女装', slider: '正挂', price: '13.2', inventoryNum: 12, placedNum: 34},
-    {id: 2, name: '羊毛衫', slider: '侧挂挂', price: '165.2', inventoryNum: 54, placedNum: 234},
+    {id: 2, name: '羊毛衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
     {id: 3, name: '羊毛衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
     {id: 4, name: '羊毛43衫', slider: '正挂', price: '165.2', inventoryNum: 54, placedNum: 234},
     {id: 5, name: '羊毛34衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
@@ -32,9 +30,43 @@ const Index = () => {
     {id: 4, name: "其他"},
   ]
   // 矩形框内重新分配空间
-  const handleReArrangement = () => {
+  const handleReArrangement = (objectsInGroup:any) => {
     let groupActive = canvas.getActiveObject()
-
+    let uid = groupActive.get('uid')
+    const { objects,...others} = groupActive.toObject()
+    const {x} = groupActive.getCenterPoint()
+    let iTextAll1 = objectsInGroup.filter((n:fabric.object)=>n.type==='i-text'&&n.iTextType==='goodsSuspensionMethod')
+    let iTextAll2 = objectsInGroup.filter((n:fabric.object)=>n.type==='i-text'&&n.iTextType==='goodsName')
+    let newGroup = new fabric.Group([objectsInGroup[0]], {
+      ...others,
+      uid
+    });
+    if(iTextAll1.length){
+      iTextAll1.forEach((item:fabric.object,index:number) => {
+        let  { height } = iTextAll1[index]
+        // item.set('left', x - width / 2)  // 设置中心
+        item.set('left', groupActive.left+4)
+        let top =  groupActive.top + (2*(index+1)-1)/(iTextAll1.length*2)*groupActive.height - height/2
+        item.set('top', top)
+        console.log('类型Top',top)
+        newGroup.addWithUpdate(item);
+      })
+      iTextAll2.forEach((item:fabric.object,index:number) => {
+      const { height } = iTextAll2[index]
+        let  { width } = iTextAll1[index]
+        // item.set('left', x - width / 2)
+        item.set('left', groupActive.left+width+8)
+        let top =  groupActive.top + (2*(index+1)-1)/(iTextAll2.length*2)*groupActive.height - height/2
+        item.set('top', top)
+        console.log('名字Top',top)
+        item.set('itextGroupTop',(2*(index+1)-1)/(iTextAll2.length*2)*groupActive.height)
+        newGroup.addWithUpdate(item);
+      })
+    }
+    canvas.remove(groupActive);
+    canvas.add(newGroup);
+    canvas.setActiveObject(newGroup);
+    canvas.renderAll();
   }
   const handleClick = (val: any) => {
     let arr = [...selectTypeArr]
@@ -48,39 +80,36 @@ const Index = () => {
   }
   const handleAddRect = (activeObject:any)=>{
     let groupActive = canvas.getActiveObject()
-    let objectsInGroup = groupActive.getObjects(); // 获取组内的所有对象
-    let uid = activeObject.get('uid')
+    let objectsInGroup = groupActive.getObjects();
+    let uid = groupActive.get('uid')
     let customData = activeObject.get('customData') || []
     activeObject?.set('fill', 'transparent')
-    const {x} = groupActive.getCenterPoint()
-    let filterArr = goodsList.filter(x => selectItemList.includes(x.id)) || []
+    let selectArr = goodsList.filter(x => selectItemList.includes(x.id)) || []
+    let customDataIdArr = customData?.map(x=>x.id)
+    let filterArr = selectArr.filter(x=>!customDataIdArr.includes(x.id))
     let customDataArr = [...customData, ...filterArr]
     activeObject?.set('customData', customDataArr)
     filterArr.forEach((item) => {
-      const text = new fabric.IText(`${item.slider}   ${item.name}`, {
-        fontSize: 15,
-        uid: `iText/${uid}/${item.id}`,
+      const text = new fabric.IText(`${item.slider}`, {
+        width:28,
+        fontSize: 24,
+        id:item.id,
+        iTextType: 'goodsSuspensionMethod',
+        uid: `iText/${uid}/goodsSuspensionMethod/${item.id}`,
       });
       objectsInGroup.push(text)
     })
-    // 重新创建一个组
-    let newGroup = new fabric.Group([objectsInGroup[0]], {
-      left: groupActive.left,
-      top: groupActive.top
-    });
-    let iTextAll = objectsInGroup.filter((n)=>n.type==='i-text')
-    if(iTextAll.length){
-      let  { width,height } = iTextAll[0]
-      iTextAll.forEach((item:fabric.object,index:number) => {
-        item.set('left', x - width / 2)
-       let top =  groupActive.top + (2*(index+1)-1)/(iTextAll.length*2)*groupActive.height - height/2
-        item.set('top', top)
-        newGroup.addWithUpdate(item);
-      })
-    }
-    canvas.remove(groupActive);
-    canvas.add(newGroup);
-    canvas.renderAll();
+    filterArr.forEach((item) => {
+      const text = new fabric.IText(`${item.name}`, {
+        fontSize: 24,
+        id:item.id,
+        iTextType: 'goodsName',
+        uid: `iText/${uid}/goodsName/${item.id}`,
+      });
+      objectsInGroup.push(text)
+    })
+    // 处理重新分配空间
+    handleReArrangement(objectsInGroup)
   }
   const handleAddShelves = () => {
     let activeObject = canvas.getActiveObject()?.getObjects().find(x => x.type === 'rect')
@@ -150,7 +179,6 @@ const Index = () => {
       pageX: event.pageX,
       pageY: event.pageY
     }
-    // handleIsDrag(canvas.restorePointerVpt(point))
   }
   return (
     <div className={style.goodsInfo}>

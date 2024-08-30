@@ -17,10 +17,10 @@ const CenterLeft = () => {
     setType(type);
   }
   const addRect = (event?:any)=>{
-    var img = new Image();
+    let img = new Image();
     img.src = arrow;
     img.onload = function () {
-      var pattern = new fabric.Pattern({
+      let pattern = new fabric.Pattern({
         source: img,
         repeat: 'no-repeat'
       });
@@ -30,7 +30,6 @@ const CenterLeft = () => {
         stroke:'#666666',
         strokeWidth:2,
         uid:uuid(),
-        // fill:'transparent',
         fill:pattern,
         strokeUniform: true
       });

@@ -13,28 +13,34 @@ import {entranceInit} from "@/plugin/ApplicationEntrancePlugin";
 import {initDringPlugin} from "@/plugin/DringPlugin";
 import DateSelectType from "@/components/DateSelectType";
 import {initControls} from "@/plugin/ControlsPlugin";
+import TagContent from "@/components/TagContent";
 const { Header} = Layout;
 export const CanvasContext = React.createContext({})
 const MyComponent = () => {
   const [activeType, setActiveType] = useState<string>('')
   const [canvas,setCanvas] = useState<any>()
-  useEffect(() => {
-    const canvas = new fabric.Canvas('canvas',{
-      fireRightClick: true,
-      stopContextMenu: true,
-      preserveObjectStacking: true
-    });
+   // 初始化canvas
+  const _initCanvas = (canvas:fabric.canvas)=>{
     canvas.on('mouse:down', (opt:any)=>{
       if(opt.button === 1){
         setGlobalValue('canvasActiveType',canvas.getActiveObject()?.type)
         setActiveType(canvas.getActiveObject()?.type)
       }
     });
-    setCanvas(canvas)
     // 入口
     initDringPlugin(canvas)
     entranceInit(canvas)
     initControls()
+    setGlobalValue('canvasExample',canvas)
+  }
+  useEffect(() => {
+    const canvas = new fabric.Canvas('canvas',{
+      fireRightClick: true,
+      stopContextMenu: true,
+      preserveObjectStacking: true
+    });
+    _initCanvas(canvas)
+    setCanvas(canvas)
     fabric.Rect.prototype.toObject = (function(toObject) {
       return function() {
         return fabric.util.object.extend(toObject.call(this), {
@@ -43,11 +49,13 @@ const MyComponent = () => {
           uid: this.uid,
           selectable: this.selectable,
           hasControls: this.hasControls,
-          hoverCursor: this.hoverCursor
+          hoverCursor: this.hoverCursor,
+          itextGroupLeft: this.itextGroupLeft,
+          itextGroupTop: this.itextGroupTop,
+          iTextType:this.iTextType,
         });
       };
     })(fabric.Rect.prototype.toObject);
-    setGlobalValue('canvasExample',canvas)
   }, []);
   useEffect(()=>{
     let footer = document.getElementsByTagName('footer')
@@ -91,6 +99,7 @@ const MyComponent = () => {
           <div className={style.workspace} id='workspace'>
             <canvas id='canvas'></canvas>
             <RightMenu/>
+            <TagContent />
           </div>
           <CenterRight />
         </div>

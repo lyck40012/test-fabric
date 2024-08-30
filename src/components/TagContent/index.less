@@ -1,0 +1,49 @@
+.tagContent{
+  position: absolute;
+  z-index: 10;
+  top: 10px;
+  right: 10px;
+  background-color: #fff;
+  .horizontal{
+    width: 472px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 8px;
+    box-sizing: border-box;
+    .item{
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.85);
+      cursor: pointer;
+      .colorBlock{
+        margin:0 10px;
+      }
+    }
+    .item:nth-child(1){
+      .colorBlock{
+        width: 13px;
+        height: 13px;
+        background-color: #FFF8C6;
+
+      }
+    }
+    .item:nth-child(2){
+      .colorBlock{
+        width: 13px;
+        height: 13px;
+        background-color: #ffd7ed;
+      }
+    }
+    .item:nth-child(3){
+      .colorBlock{
+        width: 0;
+        height: 0;
+        border-right: 12px solid transparent;
+        border-bottom: 10px solid #eb2f96;
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
