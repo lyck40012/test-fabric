@@ -35,8 +35,11 @@ const Index = () => {
     let uid = groupActive.get('uid')
     const { objects,...others} = groupActive.toObject()
     const {x} = groupActive.getCenterPoint()
-    let iTextAll1 = objectsInGroup.filter((n:fabric.object)=>n.type==='i-text'&&n.iTextType==='goodsSuspensionMethod')
-    let iTextAll2 = objectsInGroup.filter((n:fabric.object)=>n.type==='i-text'&&n.iTextType==='goodsName')
+    objectsInGroup.forEach(a=>{
+      console.log(a.type)
+    })
+    let iTextAll1 = objectsInGroup.filter((n:fabric.object)=>n.type==='textbox'&&n.iTextType==='goodsSuspensionMethod')
+    let iTextAll2 = objectsInGroup.filter((n:fabric.object)=>n.type==='textbox'&&n.iTextType==='goodsName')
     let newGroup = new fabric.Group([objectsInGroup[0]], {
       ...others,
       uid
@@ -58,7 +61,6 @@ const Index = () => {
         item.set('left', groupActive.left+width+8)
         let top =  groupActive.top + (2*(index+1)-1)/(iTextAll2.length*2)*groupActive.height - height/2
         item.set('top', top)
-        item.set('width', 50)
         item.set('itextGroupTop',(2*(index+1)-1)/(iTextAll2.length*2)*groupActive.height)
         newGroup.addWithUpdate(item);
       })
@@ -82,6 +84,7 @@ const Index = () => {
     let groupActive = canvas.getActiveObject()
     let objectsInGroup = groupActive.getObjects();
     let uid = groupActive.get('uid')
+    let groupActiveBound = groupActive.getBoundingRect()
     let customData = activeObject.get('customData') || []
     activeObject?.set('fill', 'transparent')
     let selectArr = goodsList.filter(x => selectItemList.includes(x.id)) || []
@@ -90,23 +93,30 @@ const Index = () => {
     let customDataArr = [...customData, ...filterArr]
     activeObject?.set('customData', customDataArr)
     filterArr.forEach((item) => {
-      const text = new fabric.IText(`${item.slider}`, {
-        width:28,
+      const text = new fabric.Textbox(`${item.slider}`, {
+        width:50,
         fontSize: 24,
         id:item.id,
+        splitByGrapheme: true,
         iTextType: 'goodsSuspensionMethod',
         uid: `iText/${uid}/goodsSuspensionMethod/${item.id}`,
       });
       objectsInGroup.push(text)
     })
     filterArr.forEach((item) => {
-      const text = new fabric.IText(`${item.name}`, {
+      const text = new fabric.Textbox(`${item.name}`, {
         fontSize: 24,
         id:item.id,
+        width:groupActiveBound.width-50-12,
         iTextType: 'goodsName',
         textAlign: 'left',
         uid: `iText/${uid}/goodsName/${item.id}`,
       });
+     let flag =  groupActiveBound.width < 50-12 + text.width
+      if(flag){
+        text.set('splitByGrapheme',true)
+        text.set('fontSize',15)
+      }
       objectsInGroup.push(text)
     })
     // 处理重新分配空间
