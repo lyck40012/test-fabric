@@ -15,7 +15,7 @@ const Index = () => {
   const [selectItemList, setSelectItemList] = React.useState<any[]>([]);
   const [goodsList, setGoodsList] = useState([
     {id: 1, name: '女装', slider: '正挂', price: '13.2', inventoryNum: 12, placedNum: 34},
-    {id: 2, name: '羊毛衫大量长毛色染色', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
+    {id: 2, name: '羊毛衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
     {id: 3, name: '羊毛衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
     {id: 4, name: '羊毛43衫', slider: '正挂', price: '165.2', inventoryNum: 54, placedNum: 234},
     {id: 5, name: '羊毛34衫', slider: '侧挂', price: '165.2', inventoryNum: 54, placedNum: 234},
@@ -55,12 +55,13 @@ const Index = () => {
       })
       // 处理名称
       iTextAll2.forEach((item:fabric.object,index:number) => {
-      const { height } = iTextAll2[index]
+      const { height,splitByGrapheme } = iTextAll2[index]
         let  { width } = iTextAll1[index]
         // item.set('left', x - width / 2)
         item.set('left', groupActive.left+width+8)
         let top =  groupActive.top + (2*(index+1)-1)/(iTextAll2.length*2)*groupActive.height - height/2
         item.set('top', top)
+        item.set('splitByGrapheme',splitByGrapheme)
         item.set('itextGroupTop',(2*(index+1)-1)/(iTextAll2.length*2)*groupActive.height)
         newGroup.addWithUpdate(item);
       })
@@ -252,7 +253,6 @@ const Index = () => {
               </div>
             </div>
           ))}
-
         </Checkbox.Group>
       </div>
     </div>
